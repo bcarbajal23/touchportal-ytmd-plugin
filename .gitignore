@@ -137,3 +137,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+Touch_Portal_YTMD_Plugin/
+TouchPortalYTMDPlugin/
+ytmd_plugin_v2/
