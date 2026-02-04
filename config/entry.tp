@@ -1,20 +1,20 @@
 {
   "sdk": 10,
   "version": 1,
-  "name":"Youtube Music Desktop Plugin V2",
+  "name": "Youtube Music Desktop Plugin V2",
   "id": "ytmd_plugin_v2",
   "configuration": {
     "colorDark": "#860505",
     "colorLight": "#FF8F7E",
     "parentCategory": "audio"
-    },
-  "plugin_start_cmd_linux": "sh %TP_PLUGIN_FOLDER%tytmd_plugin_v2//start.sh\\",
+  },
+  "plugin_start_cmd_linux": "sh %TP_PLUGIN_FOLDER%ytmd_plugin_v2/start.sh",
   "settings": [
     {
       "name": "Host (localhost set by default)",
-      "type":"text",
+      "type": "text",
       "default": "localhost",
-      "readOnly": false 
+      "readOnly": false
     },
     {
       "name": "Port (YouTube Music Desktop default port)",
@@ -22,33 +22,60 @@
       "default": "9863"
     }
   ],
-  "categories": [{
-    "id": "Main",
-    "name": "YouTube Music Desktop",
-    "imagepath": "%TP_PLUGIN_FOLDER%ytmd_plugin_v2//icon.png",
-    "actions": [
-      {
-        "id": "ytmd.action.play/pause",
-        "name": "YouTube Music Playback Play/Pause",
-        "type": "communicate",
-        "tryInline": "true",
-        "lines": {
-          "action": [
-            {
-              "language": "default",
-              "data": [{
-                "id": "ytmd.action.play/pause",
-                "type": "choice",
-                "default": "Play",
-                "valueChoices": [
-                  "Pause",
-                  "Play"
+  "categories": [
+    {
+      "id": "Main",
+      "name": "YouTube Music Desktop",
+      "imagepath": "%TP_PLUGIN_FOLDER%ytmd_plugin_v2//icon.png",
+      "actions": [
+        {
+          "id": "ytmd.action.play/pause",
+          "name": "YouTube Music Playback Play/Pause",
+          "type": "communicate",
+          "tryInline": "true",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "id": "ytmd.action.play/pause",
+                    "type": "choice",
+                    "default": "Play",
+                    "valueChoices": [
+                      "Pause",
+                      "Play",
+                      "Toggle"
+                    ]
+                  }
                 ]
-              }]
-            }
-          ]
+              }
+            ]
+          }
         }
-      }
-    ]
-  }]
+      ],
+      "events": [
+        {
+          "id": "ytmd.events.isPaused",
+          "name": "YouTube Music play state changes",
+          "format": "When YouTube Music is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "PLAYING",
+            "PAUSED"
+          ],
+          "valueStateId": "ytmd.states.isPaused"
+        }
+      ],
+      "states": [
+        {
+          "id": "ytmd.states.isPaused",
+          "type": "text",
+          "desc": "YouTube Music play state paused",
+          "default": "PAUSED"
+        }
+      ]
+    }
+  ]
 }
