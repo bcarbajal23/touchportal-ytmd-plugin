@@ -1,0 +1,30 @@
+{
+  "name": "touchportal-ytmd-plugin-v2",
+  "version": "1.0.0",
+  "description": "Touch Portal plugin for Youtube Music Desktop App",
+  "homepage": "https://github.com/bcarbajal23/touchportal-ytmd-plugin-v2#readme",
+  "bugs": {
+    "url": "https://github.com/bcarbajal23/touchportal-ytmd-plugin-v2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bcarbajal23/touchportal-ytmd-plugin-v2.git"
+  },
+  "license": "ISC",
+  "author": "Carlos Carbajal",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && npx tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.31",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "touchportal-api": "^4.0.0",
+    "ytmdesktop-ts-companion": "^1.1.0"
+  }
+}
