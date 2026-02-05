@@ -32,48 +32,52 @@
           "id": "ytmd.action.play/pause",
           "name": "YouTube Music Playback Play/Pause",
           "type": "communicate",
-          "tryInline": "true",
           "lines": {
             "action": [
               {
                 "language": "default",
                 "data": [
                   {
-                    "id": "ytmd.action.play/pause",
-                    "type": "choice",
-                    "default": "Play",
-                    "valueChoices": [
-                      "Pause",
-                      "Play",
-                      "Toggle"
-                    ]
+                    "lineFormat": "YouTube Music play state {$ytmd.choice.playState$}"
                   }
                 ]
               }
             ]
-          }
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.playState",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "Pause",
+                "Play",
+                "Toggle"
+              ]
+            }
+          ]
         }
       ],
       "events": [
         {
-          "id": "ytmd.events.isPaused",
+          "id": "ytmd.event.playback",
           "name": "YouTube Music play state changes",
           "format": "When YouTube Music is $val",
           "type": "communicate",
           "valueType": "choice",
           "valueChoices": [
-            "PLAYING",
-            "PAUSED"
+            "Play",
+            "Pause"
           ],
-          "valueStateId": "ytmd.states.isPaused"
+          "valueStateId": "ytmd.states.playbackState"
         }
       ],
       "states": [
         {
-          "id": "ytmd.states.isPaused",
+          "id": "ytmd.states.playbackState",
           "type": "text",
           "desc": "YouTube Music play state paused",
-          "default": "PAUSED"
+          "default": "Pause"
         }
       ]
     }

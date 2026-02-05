@@ -8,10 +8,10 @@ import { YTMDClient } from './services/ytmdClient';
     const ytmdClient = new YTMDClient();
 
     ytmdClient.socketClient.addStateListener((state) => {
-      // console.log("YTMD SocketClient State:::::", state);
-      const status = state.player.trackState ? "PLAYING" : "PAUSED";
+      const status = state.player.trackState ? "Play" : "Pause";
       console.log("YTMD SocketClient Status:::::", status);
       tpClient.stateUpdate("ytmd.action.play/pause", status);
+      tpClient.stateUpdate("ytmd.states.playbackState", status);
     });
 
     ytmdClient.socketClient.addConnectionStateListener((state) => {
@@ -23,6 +23,7 @@ import { YTMDClient } from './services/ytmdClient';
     tpClient.on("Action", async (data: any) => {
       console.log("TPClient Action:::::", data);
       const actionId = data.actionId;
+      console.log("TPClient Action ID:::::", actionId);
       try {
         switch (actionId) {
           case "ytmd.action.play/pause":
