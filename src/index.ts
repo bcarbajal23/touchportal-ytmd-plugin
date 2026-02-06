@@ -7,13 +7,24 @@ import { YTMDClient } from './services/ytmdClient';
     const tpClient = await touchPortalClient();
     const ytmdClient = new YTMDClient();
 
+    let isCurrentlyMuted = false;
+    
     ytmdClient.socketClient.addStateListener((state) => {
-      const status = state.player.trackState ? "Play" : "Pause";
+      const status = state.player?.trackState ? "Play" : "Pause";
+
       console.log("YTMD SocketClient Status:::::", status);
       tpClient.stateUpdate("ytmd.action.play/pause", status);
       tpClient.stateUpdate("ytmd.states.playbackState", status);
     });
 
+    ytmdClient.socketClient.addStateListener((state) => {
+      const isMuted = state.player?.muted ?? false;
+      isCurrentlyMuted = isMuted;
+      const audioStatus = isMuted ? "Muted" : "Unmuted";
+      tpClient.stateUpdate("ytmd.action.mute/unmute", audioStatus);
+      tpClient.stateUpdate("ytmd.states.mutedState", audioStatus);
+    });
+    
     ytmdClient.socketClient.addConnectionStateListener((state) => {
       console.log("YTMD SocketClient Connection State:::::", state);
     });
@@ -34,6 +45,14 @@ import { YTMDClient } from './services/ytmdClient';
             break;
           case "ytmd.action.prevTrack":
             await ytmdClient.restClient.previous();
+            break;
+          case "ytmd.action.mute/unmute":
+            if (isCurrentlyMuted) {
+              await ytmdClient.restClient.unmute();
+            } else {
+              await ytmdClient.restClient.mute();
+            }
+            break;
           default:
             console.log(`No handler for action ID:  ${actionId}`);
             break;

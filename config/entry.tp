@@ -101,14 +101,24 @@
                 "language": "default",
                 "data": [
                   {
-                    "lineFormat": "Current audio state: "
+                    "lineFormat": "Current audio state: {$ytmd.choice.audioPlayback$}"
                   }
                 ]
               }
             ]
-          }
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.audioPlayback",
+              "type": "choice",
+              "default": "Unmuted",
+              "valueChoices": [
+                "Muted",
+                "Unmuted"
+              ]
+            }
+          ]
         }
-        
       ],
       "events": [
         {
@@ -122,14 +132,32 @@
             "Pause"
           ],
           "valueStateId": "ytmd.states.playbackState"
+        },
+        {
+          "id": "ytmd.event.audioPlayback",
+          "name": "YouTube Music audio state changes",
+          "format": "When audio is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "Muted",
+            "Unmuted"
+          ],
+          "valueStateId": "ytmd.states.mutedState"
         }
       ],
       "states": [
         {
           "id": "ytmd.states.playbackState",
           "type": "text",
-          "desc": "YouTube Music play state paused",
+          "desc": "YouTube Music play state (Play or Pause)",
           "default": "Pause"
+        },
+        {
+          "id": "ytmd.states.mutedState",
+          "type": "text",
+          "desc": "YouTube Music audio state (Mutes or Unmuted)",
+          "default": "Unmuted"
         }
       ]
     }
