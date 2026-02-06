@@ -29,6 +29,11 @@ import { YTMDClient } from './services/ytmdClient';
           case "ytmd.action.play/pause":
             await ytmdClient.restClient.playPause();
             break;
+          case "ytmd.action.nextTrack":
+            await ytmdClient.restClient.next();
+            break;
+          case "ytmd.action.prevTrack":
+            await ytmdClient.restClient.previous();
           default:
             console.log(`No handler for action ID:  ${actionId}`);
             break;

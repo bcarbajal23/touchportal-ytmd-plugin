@@ -56,7 +56,59 @@
               ]
             }
           ]
+        },
+        {
+          "id": "ytmd.action.nextTrack",
+          "name": "Play Next Track",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Play next track"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.prevTrack",
+          "name": "Play Previous Track",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Play previous track"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.mute/unmute",
+          "name": "Mute/Unmute",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Current audio state: "
+                  }
+                ]
+              }
+            ]
+          }
         }
+        
       ],
       "events": [
         {
