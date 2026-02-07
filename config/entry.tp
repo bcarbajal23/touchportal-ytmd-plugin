@@ -111,10 +111,75 @@
             {
               "id": "ytmd.choice.audioPlayback",
               "type": "choice",
-              "default": "Unmuted",
+              "default": "Toggle",
               "valueChoices": [
                 "Muted",
-                "Unmuted"
+                "Unmuted",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.volumeUp",
+          "name": "Volume Up",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Volume Up"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.volumeDown",
+          "name": "Volume Down",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Volume Down"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ymtd.action.repeatMode",
+          "name": "YouTube Music Repeat Mode",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "YouTube Music repeat mode {$ytmd.choice.repeatMode$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.repeatMode",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "NONE",
+                "ALL",
+                "ONE",
+                "Toggle"
               ]
             }
           ]
@@ -144,6 +209,19 @@
             "Unmuted"
           ],
           "valueStateId": "ytmd.states.mutedState"
+        },
+        {
+          "id": "ytmd.event.repeatMode",
+          "name": "YouTube Music repeat mode changes",
+          "format": "When repeat mode is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "NONE",
+            "ALL",
+            "ONE"
+          ],
+          "valueStateId": "ytmd.states.repeatMode"
         }
       ],
       "states": [
@@ -158,6 +236,12 @@
           "type": "text",
           "desc": "YouTube Music audio state (Mutes or Unmuted)",
           "default": "Unmuted"
+        },
+        {
+          "id": "ytmd.states.repeatMode",
+          "type": "text",
+          "desc": "YouTube Music repeat mode (NONE, ALL, ONE)",
+          "default": "NONE"
         }
       ]
     }
