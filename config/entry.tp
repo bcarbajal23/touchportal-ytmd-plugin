@@ -155,7 +155,7 @@
           }
         },
         {
-          "id": "ymtd.action.repeatMode",
+          "id": "ytmd.action.repeatMode",
           "name": "YouTube Music Repeat Mode",
           "type": "communicate",
           "lines": {
@@ -179,6 +179,35 @@
                 "NONE",
                 "ALL",
                 "ONE",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.shuffleMode",
+          "name": "Shuffle On/Off",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "YouTube Music shuffle mode {$ytmd.choice.shuffleMode$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.shuffleMode",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "OFF",
+                "ON",
                 "Toggle"
               ]
             }
@@ -222,6 +251,18 @@
             "ONE"
           ],
           "valueStateId": "ytmd.states.repeatMode"
+        },
+        {
+          "id": "ytmd.event.shuffleMode",
+          "name": "YouTube Music shuffle mode changes",
+          "format": "When shuffle mode is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "OFF",
+            "ON"
+          ],
+          "valueStateId": "ytmd.states.shuffleMode"
         }
       ],
       "states": [
@@ -242,6 +283,12 @@
           "type": "text",
           "desc": "YouTube Music repeat mode (NONE, ALL, ONE)",
           "default": "NONE"
+        },
+        {
+          "id": "ytmd.states.shuffleMode",
+          "type": "text",
+          "desc": "YouTube Music shuffle mode (OFF, ON)",
+          "default": "OFF"
         }
       ]
     }

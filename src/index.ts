@@ -12,8 +12,9 @@ import { YTMDClient } from "./services/ytmdClient";
 
     let isCurrentlyMuted = false;
     let currentRepeatMode = 0;
-
+    let currentShuffleMode = "OFF"; 
     ytmdClient.socketClient.addStateListener((state) => {
+      // console.log("YTMD SocketClient State:::::", state.player);
       const status = state.player?.trackState ? "Play" : "Pause";
 
       console.log("YTMD SocketClient Status:::::", status);
@@ -43,6 +44,12 @@ import { YTMDClient } from "./services/ytmdClient";
 
       tpClient.stateUpdate(TP_ACTIONS.ytmdRepeatMode, repeatModeStr);
       tpClient.stateUpdate(TP_STATES.ytmdRepeatMode, repeatModeStr);
+    });
+    
+    ytmdClient.socketClient.addStateListener((state) => {
+      const shuffleMode = currentShuffleMode;
+      tpClient.stateUpdate(TP_ACTIONS.ytmdShuffleMode, shuffleMode);
+      tpClient.stateUpdate(TP_STATES.ytmdShuffleMode, shuffleMode);
     });
 
     ytmdClient.socketClient.addConnectionStateListener((state) => {
@@ -79,8 +86,16 @@ import { YTMDClient } from "./services/ytmdClient";
           case "ytmd.action.volumeDown":
             await ytmdClient.restClient.volumeDown();
             break;
-          case "ymtd.action.repeatMode":
+          case "ytmd.action.repeatMode":
             await ytmdClient.restClient.repeatMode(currentRepeatMode);
+            break;
+          case "ytmd.action.shuffleMode":
+            if (currentShuffleMode === "OFF") {
+              currentShuffleMode = "ON";
+            } else {
+              currentShuffleMode = "OFF";
+            }
+            await ytmdClient.restClient.shuffle();
             break;
           default:
             console.log(`No handler for action ID:  ${actionId}`);
