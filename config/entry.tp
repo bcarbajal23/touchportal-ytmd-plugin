@@ -32,48 +32,315 @@
           "id": "ytmd.action.play/pause",
           "name": "YouTube Music Playback Play/Pause",
           "type": "communicate",
-          "tryInline": "true",
           "lines": {
             "action": [
               {
                 "language": "default",
                 "data": [
                   {
-                    "id": "ytmd.action.play/pause",
-                    "type": "choice",
-                    "default": "Play",
-                    "valueChoices": [
-                      "Pause",
-                      "Play",
-                      "Toggle"
-                    ]
+                    "lineFormat": "YouTube Music play state {$ytmd.choice.playState$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.playState",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "Pause",
+                "Play",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.nextTrack",
+          "name": "Play Next Track",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Play next track"
                   }
                 ]
               }
             ]
           }
+        },
+        {
+          "id": "ytmd.action.prevTrack",
+          "name": "Play Previous Track",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Play previous track"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.mute/unmute",
+          "name": "Mute/Unmute",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Current audio state: {$ytmd.choice.audioPlayback$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.audioPlayback",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "Muted",
+                "Unmuted",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.volumeUp",
+          "name": "Volume Up",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Volume Up"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.volumeDown",
+          "name": "Volume Down",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Volume Down"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "ytmd.action.repeatMode",
+          "name": "YouTube Music Repeat Mode",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "YouTube Music repeat mode {$ytmd.choice.repeatMode$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.repeatMode",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "NONE",
+                "ALL",
+                "ONE",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.shuffleMode",
+          "name": "Shuffle On/Off",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "YouTube Music shuffle mode {$ytmd.choice.shuffleMode$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.shuffleMode",
+              "type": "choice",
+              "default": "Toggle",
+              "valueChoices": [
+                "OFF",
+                "ON",
+                "Toggle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ytmd.action.like/dislike",
+          "name": "Track Like/Dislike",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Track is {$ytmd.choice.likeDislike$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.likeDislike",
+              "default": "",
+              "type": "choice",
+              "valueChoices": [
+                "DISLIKE",
+                "LIKE"
+              ]
+            }
+          ]
         }
       ],
       "events": [
         {
-          "id": "ytmd.events.isPaused",
+          "id": "ytmd.event.playback",
           "name": "YouTube Music play state changes",
           "format": "When YouTube Music is $val",
           "type": "communicate",
           "valueType": "choice",
           "valueChoices": [
-            "PLAYING",
-            "PAUSED"
+            "Play",
+            "Pause"
           ],
-          "valueStateId": "ytmd.states.isPaused"
+          "valueStateId": "ytmd.states.playbackState"
+        },
+        {
+          "id": "ytmd.event.audioPlayback",
+          "name": "YouTube Music audio state changes",
+          "format": "When audio is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "Muted",
+            "Unmuted"
+          ],
+          "valueStateId": "ytmd.states.mutedState"
+        },
+        {
+          "id": "ytmd.event.repeatMode",
+          "name": "YouTube Music repeat mode changes",
+          "format": "When repeat mode is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "NONE",
+            "ALL",
+            "ONE"
+          ],
+          "valueStateId": "ytmd.states.repeatMode"
+        },
+        {
+          "id": "ytmd.event.shuffleMode",
+          "name": "YouTube Music shuffle mode changes",
+          "format": "When shuffle mode is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "OFF",
+            "ON"
+          ],
+          "valueStateId": "ytmd.states.shuffleMode"
+        },
+        {
+          "id": "ytmd.event.likeDislike",
+          "name": "Track Like/Dislike",
+          "format": "When track is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "DISLIKE",
+            "INDIFFERENT",
+            "LIKE"
+          ],
+          "valueStateId": "ytmd.states.likeDislike"
         }
       ],
       "states": [
         {
-          "id": "ytmd.states.isPaused",
+          "id": "ytmd.states.playbackState",
           "type": "text",
-          "desc": "YouTube Music play state paused",
-          "default": "PAUSED"
+          "desc": "YouTube Music play state (Play or Pause)",
+          "default": "Pause"
+        },
+        {
+          "id": "ytmd.states.mutedState",
+          "type": "text",
+          "desc": "YouTube Music audio state (Mutes or Unmuted)",
+          "default": "Unmuted"
+        },
+        {
+          "id": "ytmd.states.repeatMode",
+          "type": "text",
+          "desc": "YouTube Music repeat mode (NONE, ALL, ONE)",
+          "default": "NONE"
+        },
+        {
+          "id": "ytmd.states.shuffleMode",
+          "type": "text",
+          "desc": "YouTube Music shuffle mode (OFF, ON)",
+          "default": "OFF"
+        },
+        {
+          "id": "ytmd.states.likeDislike",
+          "type": "text",
+          "desc": "Track Like/Dislike (DISLIKE, INDIFFERENT, LIKE)",
+          "default": "INDIFFERENT",
+          "valueChoices": [
+            "DISLIKE",
+            "INDIFFERENT",
+            "LIKE"
+          ]
         }
       ]
     }

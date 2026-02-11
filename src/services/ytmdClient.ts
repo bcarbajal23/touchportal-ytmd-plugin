@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { CompanionConnector, RestClient, Settings, SocketClient } from 'ytmdesktop-ts-companion';
 
-
+const DEFAULT_DELAY = 2000;
 export class YTMDClient {
   private companionConnector: CompanionConnector;
   public restClient: RestClient;
@@ -49,14 +49,36 @@ export class YTMDClient {
     }
   }
 
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   private async syncNewAuthToken(): Promise<void> {
     try {
       // request new auth token
       const response = await this.restClient.getAuthCode();
 
-      //get token
-      const tokenResponse = await this.restClient.getAuthToken(response.code);
-      const token = tokenResponse.token;
+      let token = null;
+      let attempts = 0;
+      const maxAttempts = 15;
+
+      while (!token && attempts < maxAttempts) {
+        try {
+          await this.delay(DEFAULT_DELAY);
+          //get token
+          const tokenResponse = await this.restClient.getAuthToken(
+            response.code,
+          );
+          token = tokenResponse.token;
+        } catch (error) {
+          attempts++;
+        }
+      }
+
+      if (!token) {
+        throw new Error(
+          "Authentication Timeout. User did not click 'Allow' in time.",
+        );
+      }
 
       this.companionConnector.setAuthToken(token);
       fs.writeFileSync(this.tokenPath, token, "utf-8");
