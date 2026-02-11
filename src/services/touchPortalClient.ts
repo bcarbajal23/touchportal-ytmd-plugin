@@ -9,6 +9,7 @@ export const TP_ACTIONS = {
   ytmdVolumeDown: "ytmd.action.volumeDown",
   ytmdRepeatMode: "ytmd.action.repeatMode",
   ytmdShuffleMode: "ytmd.action.shuffleMode",
+  ytmdLikeDislike: "ytmd.action.like/dislike",
 };
 
 export const TP_EVENTS = {
@@ -16,6 +17,7 @@ export const TP_EVENTS = {
   ytmdEventAudioPlayback: "ytmd.event.audioPlayback",
   ytmdEventRepeatMode: "ytmd.event.repeatMode",
   ytmdEventShuffleMode: "ytmd.event.shuffleMode",
+  ytmdEventLikeDislike: "ytmd.event.likeDislike",
 };
 
 export const TP_STATES = {
@@ -23,6 +25,7 @@ export const TP_STATES = {
   ytmdMutedState: "ytmd.states.mutedState",
   ytmdRepeatMode: "ytmd.states.repeatMode",
   ytmdShuffleMode: "ytmd.states.shuffleMode",
+  ytmdLikeDislike: "ytmd.states.likeDislike",
 };
 
 const PLUGIN_ID = 'ytmd_plugin_v2';

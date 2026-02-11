@@ -212,6 +212,34 @@
               ]
             }
           ]
+        },
+        {
+          "id": "ytmd.action.like/dislike",
+          "name": "Track Like/Dislike",
+          "type": "communicate",
+          "lines": {
+            "action": [
+              {
+                "language": "default",
+                "data": [
+                  {
+                    "lineFormat": "Track is {$ytmd.choice.likeDislike$}"
+                  }
+                ]
+              }
+            ]
+          },
+          "data": [
+            {
+              "id": "ytmd.choice.likeDislike",
+              "default": "",
+              "type": "choice",
+              "valueChoices": [
+                "DISLIKE",
+                "LIKE"
+              ]
+            }
+          ]
         }
       ],
       "events": [
@@ -263,6 +291,19 @@
             "ON"
           ],
           "valueStateId": "ytmd.states.shuffleMode"
+        },
+        {
+          "id": "ytmd.event.likeDislike",
+          "name": "Track Like/Dislike",
+          "format": "When track is $val",
+          "type": "communicate",
+          "valueType": "choice",
+          "valueChoices": [
+            "DISLIKE",
+            "INDIFFERENT",
+            "LIKE"
+          ],
+          "valueStateId": "ytmd.states.likeDislike"
         }
       ],
       "states": [
@@ -289,6 +330,17 @@
           "type": "text",
           "desc": "YouTube Music shuffle mode (OFF, ON)",
           "default": "OFF"
+        },
+        {
+          "id": "ytmd.states.likeDislike",
+          "type": "text",
+          "desc": "Track Like/Dislike (DISLIKE, INDIFFERENT, LIKE)",
+          "default": "INDIFFERENT",
+          "valueChoices": [
+            "DISLIKE",
+            "INDIFFERENT",
+            "LIKE"
+          ]
         }
       ]
     }
