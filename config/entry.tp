@@ -32,7 +32,7 @@
       "actions": [
         {
           "id": "ytmd.action.play/pause",
-          "name": "YouTube Music Playback Play/Pause",
+          "name": "Playback Play/Pause",
           "type": "communicate",
           "lines": {
             "action": [
@@ -158,7 +158,7 @@
         },
         {
           "id": "ytmd.action.repeatMode",
-          "name": "YouTube Music Repeat Mode",
+          "name": "Repeat Mode",
           "type": "communicate",
           "lines": {
             "action": [
@@ -296,7 +296,7 @@
         },
         {
           "id": "ytmd.event.likeDislike",
-          "name": "Track Like/Dislike",
+          "name": "YouTube Music track like/dislike changes",
           "format": "When track is $val",
           "type": "communicate",
           "valueType": "choice",
