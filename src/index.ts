@@ -28,7 +28,7 @@ import { YTMDClient } from "./services/ytmdClient";
       tpClient.stateUpdate(TP_STATES.ytmdPlaybackState, status);
 
       /**
-       * So that the song/video Like/Dislike status appears propely
+       * So that the song/video Like/Dislike status appears properly
        * on first start up of the plugin
        */
       const videoLikedStatusStr =
