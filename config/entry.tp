@@ -8,9 +8,9 @@
     "colorLight": "#FF8F7E",
     "parentCategory": "audio"
   },
-  "plugin_start_cmd_windows": "%TP_PLUGIN_FOLDER%ytmd_plugin_v2\\start.bat",
-  "plugin_start_cmd_linux": "sh %TP_PLUGIN_FOLDER%ytmd_plugin_v2/start.sh",
-  "plugin_start_cmd_mac": "sh %TP_PLUGIN_FOLDER%ytmd_plugin_v2/start.sh",
+  "plugin_start_cmd_windows": "%TP_PLUGIN_FOLDER%ytmd_plugin_v2\\ytmd-tpplugin-win.exe",
+  "plugin_start_cmd_linux": "sh %TP_PLUGIN_FOLDER%ytmd_plugin_v2//start.sh ytmd-tpplugin-linux",
+  "plugin_start_cmd_mac": "sh %TP_PLUGIN_FOLDER%ytmd_plugin_v2//start.sh ytmd-tpplugin-macos",
   "settings": [
     {
       "name": "Host (localhost set by default)",
