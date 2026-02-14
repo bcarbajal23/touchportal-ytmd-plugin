@@ -51,8 +51,12 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
     _* You can also download it from their [github](https://github.com/ytmdesktop/ytmdesktop) as well._
 2. Download and install [Touch Portal](https://www.touch-portal.com/) as well, version 4.0 or greater.
     _* You can skip this step if you already have it installed_
-3. Download the latest version of the plugin over on the right side in the releases section. 
-  <!-- add image of release section here -->  
+3. Download the latest version of the plugin over on the right side in the releases section or [click here](https://github.com/bcarbajal23/touchportal-ytmd-plugin/releases) and download the latest release.
+<div align="center">
+  <img 
+    src="tutorial-assets/touch-portal-release.png" 
+    alt="plugin-release" style="width:40%"
+  />
    
 4. Open the YouTube Music Desktop App and click on the **settings cogwheel** on top right corner next to the home button.
 5. Now Click on the **Integrations** tab on the left side of the panel and enable the **Companion server** toggle. This is an important step because this is how Touch Portal will be able to connect and communicate with Youtube Music.
