@@ -1,6 +1,6 @@
 {
   "name": "touchportal-ytmd-plugin-v2",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Touch Portal plugin for Youtube Music Desktop App",
   "homepage": "https://github.com/bcarbajal23/touchportal-ytmd-plugin-v2#readme",
   "bugs": {
@@ -26,7 +26,7 @@
     "version": "node scripts/versionSync.js && git add config/entry.tp"
   },
   "pkg": {
-    "assets":[
+    "assets": [
       "package.json",
       "node_modules/touchportal-api/**/*"
     ]
