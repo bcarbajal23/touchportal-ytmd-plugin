@@ -1,11 +1,15 @@
+<a id="readme-top"></a>
 # TouchPortal Youtube Music Desktop Plugin
 
 ## Description
 This is a [Touch Portal](https://www.touch-portal.com/) plugin for the [YouTube Music Desktop Application](https://ytmdesktop.app/). 
 I developed this app in NodeJS using version 20.20. The app is packaged as a NodeJS executable so that you **do not** need to install Node for this plug-in to run.
 
-
-The project was inspired by original plugin written by [KillerBOSS](https://github.com/DamienStaebler/TP-YTMD-Plugin)
+<div align="center" style="padding:8px">
+  <a href="https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=bug-report.md">Bug Report</a>
+  &middot
+  <a href="https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=feature-request.md">Feature Request</a>
+</div>
 
 <details>
   <summary>Table of Contents</summary>
@@ -29,11 +33,10 @@ The project was inspired by original plugin written by [KillerBOSS](https://gith
         <li><a href="#states">States</a></li>
       </ul>
     </li>
-    <!-- <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li> -->
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -41,7 +44,7 @@ The project was inspired by original plugin written by [KillerBOSS](https://gith
 
 ### Prequisites
 - Running Windows 10/11, MacOs (Intel, M1, M2), Linux (Ubuntu/Debian). 
-- **For MacOs users with M3 chips or newer**. Unfortunately I cannot promise this plug-in may not work for you because of Apple's requirement of ad-hoc signature for apps to run on M3 chips or later (Rosetta 2). I used [@yao-pkg/pkg](https://www.npmjs.com/package/@yao-pkg/pkg) to create the executable and they explain the [issue here](https://www.npmjs.com/package/@yao-pkg/pkg#targets).
+- **For MacOs users with M3 chips or newer**. Unfortunately I cannot promise this plug-in may not work for you because of Apple's requirement of ad-hoc signature for apps to run on M3 chips or later (Rosetta 2). I used [@yao-pkg/pkg](https://www.npmjs.com/package/@yao-pkg/pkg) to create the executable and they explain the [issue here](https://www.npmjs.com/package/@yao-pkg/pkg#targets). More info about this issue directly from [Apple](https://support.apple.com/guide/security/rosetta-2-on-a-mac-with-apple-silicon-secebb113be1/web).
 
 ### Installation
 1. Download and install [YouTube Music Desktop App](https://ytmdesktop.app/) version 2.0 or greater.
@@ -49,7 +52,8 @@ The project was inspired by original plugin written by [KillerBOSS](https://gith
 2. Download and install [Touch Portal](https://www.touch-portal.com/) as well, version 4.0 or greater.
     _* You can skip this step if you already have it installed_
 3. Download the latest version of the plugin over on the right side in the releases section. 
-  <!-- add image of release section here -->   
+  <!-- add image of release section here -->  
+   
 4. Open the YouTube Music Desktop App and click on the **settings cogwheel** on top right corner next to the home button.
 5. Now Click on the **Integrations** tab on the left side of the panel and enable the **Companion server** toggle. This is an important step because this is how Touch Portal will be able to connect and communicate with Youtube Music.
 6. Now enable the toggle for **Enable companion authorization**. Leave this window open while we set up the plug-in in Touch Portal.
@@ -64,15 +68,26 @@ The project was inspired by original plugin written by [KillerBOSS](https://gith
 <div align="center">
   <img 
     src="tutorial-assets/install-plugin-diagram.png" 
-    alt="install-plugin" style="width:75%;height:75%"
+    alt="install-plugin" 
+    style="width:75%;height:75%"
   />
 </div>
 8. Once the plug-in has finished installing, you will prompted by Touch Portal to trust the plug-in. You may press *Trust Always* (recommended) or *Yes*. Clicking on *Trust Always* will never show you that pop-up again. Clicking *Yes*, you are only trusting the plug-in for this session of Touch Portal. You will be asked to trust the plug-in again the next time you  launch Touch Portal. 
 <div align="center">
   <img 
     src="tutorial-assets/touchportal-settings-approve-plugin.png" 
-    alt="approve-plugin" style="width:75%;height:75%"
-/>
+    alt="approve-plugin" 
+    style="width:75%;height:75%"
+  />
+</div>
+
+You should see the plug-in has been turned on in the Touch Portal Settings.
+<div align="center">
+  <img 
+    src="tutorial-assets/touchportal-settings-panel.png"
+    alt="touchportal-settings"
+    style="width:75%"
+  />
 </div>
 
 9. Once you trust the plug-in, you see the **Companion Authorization Request** module pop up from the YouTube Music Desktop App. Go ahead and click **Allow** to complete the intregration of the plug-in.
@@ -86,6 +101,8 @@ The project was inspired by original plugin written by [KillerBOSS](https://gith
   **_Notes_**: 
   - Sometimes the module may not pop-up over Touch Portal, you may have to focus on the YouTube Music Desktop App to see it. 
   - Windows Specific: You have to click on the YouTube Music App icon in the Taskbar
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Trouble Shooting
 #### MacOS Users: "App is damaged" or "Unverified Developer"
@@ -109,10 +126,31 @@ If you see a blue "Windows protected your PC" window (SmartScreen):
 1.  Click **More info**.
 2.  Click the **Run anyway** button.
 
-## Usage (Actions/Events/States)
+#### Other Issues
+*Some issues I've noticed while developing the plugin*
+1. "None of the actions work after installing (re-installing) the plug-in."
+    - Solution: Press one of the buttons (Play work) in YouTube Music Desktop App should resolve the issue.
+2. "The token modal is not popping up after installing"
+    - Solution: Check that the modal is being blocked by Touch Portal, Youtube Music, or any other apps you might have open. 
+    - **Sometimes** in Windows, the modal is minimized by the Taskbar. Clicking the YouTube Music App icon in the taskbar will make the modal disappear.
+3. **Token Sync**: by default, YouTube Music Desktop App will only keep the modal open for 30 seconds, then is closes it. Try to resync by toggling the [**Enable companion authorization**](#installation) in step 6 of the installation process and togging the plugin in the Touch Portal Setting.
+4. Restarting Touch Portal usually fixes some of the issues above.
+5. If all else fails, delete the plug-in, restart Touch Portal and YouTube Music Desktop App, and re-install it following the step in the [installation](#installation) section.
 
-<div style="display: flex;">
-  <div style="flex 50%; padding: 8px;">
+<div align="center" style="font-size: 1.5em">
+  <a href="https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=bug-report.md">Report Bug Here</a>
+</div>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Usage
+
+<div style="display: flex; flex-direction:column">
+<div style="align:center;padding: 8px;">
+  <img src="tutorial-assets/touchportal-actions-events-tab.png" alt="action-events-tab" style="width:60%"/>
+  </div>
+  
+  <div style="align:center;padding: 8px;">
   
   ### Actions
   - **Playback Play/Pause**: Allows user to Play & Pause the player. 
@@ -139,33 +177,47 @@ If you see a blue "Windows protected your PC" window (SmartScreen):
   - **YouTube Music shuffle mode (OFF, ON)**: Current state of shuffle mode (On or Off).
   - **Track Like/Dislike (DISLIKE, INDIFFERENT, LIKE)**: Current like/dislike state of song/video (DISLIKE, INDIFFERENT, LIKE).
   </div>
-  <div style="flex 50%; padding: 8px;">
-  <img src="tutorial-assets/touchportal-actions-events-tab.png" alt="action-events-tab" style="width:100%;height:100%"/>
-  </div>
+  
 </div>
 
-<!-- ### Actions
-- **Playback Play/Pause**: Allows user to Play & Pause the player. 
-- **Play Next Track**: Allows user to skip to the next track.
-- **Play Previous Track**: Allows user to play previous track or restart current one. 
-- **Mute/Unmute**: Allows user toggle between muting and unmuting the player 
-- **Volume Up**: Allows user to increase player value (uses default from YTMD app).
-- **Volume Down**: Allows user to decrease player value (uses default from YTMD app).
-- **Repeat Mode**: Allows user to cycle through repeat modes (NONE, ALL, ONE).
-- **Shuffle On/Off**: Allows user toggle shuffle mode on and off.
-- **Track Like/Dislike** Allows user to like or dislike track. 
- 
-### Events
-- **YouTube Music play state changes**: Triggers Play/Pause state of player.
-- **YouTube Music audio state changes**: Triggers if the volume is increased or decreased.
-- **YouTube Music repeat mode changes**: Triggers the Repeat Mode state of player **OFF/ALL/ONE**.
-- **YouTube Music shuffle mode changes**: Triggers Shuffle Mode state of player **ON/OFF**.
-- **YouTube Music track like/dislike changes**: Triggers the Like/Dislike state of track **INDIFFERENT/LIKE/DISLIKE**.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### States
-- **YouTube Music play state (Play or Pause)**: Current playback state of player (Play or Pause).
-- **YouTube Music audio state (Mutes or Unmuted)**: Current audio state of player (Muted or Unmuted)
-- **YouTube Music repeat mode (NONE, ALL, ONE)**: Current state of repeat mode (NONE, ALL, ONE). 
-- **YouTube Music shuffle mode (OFF, ON)**: Current state of shuffle mode (On or Off).
-- **Track Like/Dislike (DISLIKE, INDIFFERENT, LIKE)**: Current like/dislike state of song/video (DISLIKE, INDIFFERENT, LIKE). -->
+## Contributing
+If you have any suggestions, feel free to fork the repo and create a pull request. You can also open a [**GitHub Issue**](https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=feature-request.md) for a feature request. Any contribution is **greatly appreciated**
 
+1. Fork Project
+2. Create your Feature Branch: `git checkout -b new-awesome-feature`
+3. Commit your changes: `git commit -m feat: added cool new feature` 
+    - Using [semantic-commit-messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
+4. Push to your branch: `git push origin new-awesome-feature`
+5. Open a Pull Request and assign it to me.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## License
+Distributed on GNU General Public License. See [`LICENSE`](/LICENSE)for more information
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contact
+Carlos Carbajal 
+Email: carlos@carbajal.dev
+
+For any issues with the plugin or suggestions, create a GitHub Issue using one of the templates or feel free to email. 
+
+Project Link: https://github.com/bcarbajal23/touchportal-ytmd-plugin
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Acknowledgments
+Helpful resources that helped me develop the plugin:
+
+- [Touch Portal Plugin API](https://www.touch-portal.com/api/index.php?section=intro) 
+- [Touch Portal Node Api](https://github.com/spdermn02/touchportal-node-api)
+- [ytmdesktop-ts-companion](https://xeroxdev.github.io/ytmdesktop-ts-companion/index.html)  
+
+The project was inspired by original plugin written by [KillerBOSS](https://github.com/DamienStaebler/TP-YTDM-Plugin)
+
+
+If you've made it this far, know that you matter and you're doing great 🙂
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
