@@ -57,6 +57,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
     src="tutorial-assets/touch-portal-release.png" 
     alt="plugin-release" style="width:40%"
   />
+  </div>
    
 4. Open the YouTube Music Desktop App and click on the **settings cogwheel** on top right corner next to the home button.
 5. Now Click on the **Integrations** tab on the left side of the panel and enable the **Companion server** toggle. This is an important step because this is how Touch Portal will be able to connect and communicate with Youtube Music.
