@@ -23,7 +23,7 @@
     "clean": "rm -rf ./dist",
     "build": "npm run clean && npx tsc",
     "watch": "npx tsc --watch",
-    "version": "node scripts/versionSync.js && git add entry.tp"
+    "version": "node scripts/versionSync.js && git add config/entry.tp"
   },
   "pkg": {
     "assets":[
