@@ -34,7 +34,7 @@ const SCRIPT_NAME = 'ytmd-tpplugin';
    * @see {@link https://www.npmjs.com/package/@yao-pkg/pkg#targets}
    */
   try {
-    execSync(`pkg . --targets node20-linux-x64,node20-win-x64,node20-macos-x64 --output ${BUILD_DIR}/${SCRIPT_NAME}`, { stdio: 'inherit' });
+    execSync(`npx @yao-pkg/pkg . --targets node20-linux-x64,node20-win-x64,node20-macos-x64 --output ${BUILD_DIR}/${SCRIPT_NAME}`, { stdio: 'inherit' });
   } catch (error) {
     console.error('Packaging failed! Check for errors and try again.', error);
     process.exit(1);
