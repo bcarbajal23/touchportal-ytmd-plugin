@@ -9,8 +9,11 @@ export class YTMDClient {
   public socketClient: SocketClient;
   private tokenPath: string;
   constructor() {
-    this.tokenPath = path.join(__dirname, "..", ".token");
-
+    const exeDir = path.dirname(process.execPath);
+    const pluginRootDir = path.join(exeDir, '.');
+    
+    this.tokenPath = path.join(pluginRootDir, ".token");
+    
     const version = this.getVersion();
     const settings: Settings = {
       host: "127.0.0.1",
