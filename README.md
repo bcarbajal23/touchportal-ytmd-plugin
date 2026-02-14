@@ -72,6 +72,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
     style="width:75%;height:75%"
   />
 </div>
+
 8. Once the plug-in has finished installing, you will prompted by Touch Portal to trust the plug-in. You may press *Trust Always* (recommended) or *Yes*. Clicking on *Trust Always* will never show you that pop-up again. Clicking *Yes*, you are only trusting the plug-in for this session of Touch Portal. You will be asked to trust the plug-in again the next time you  launch Touch Portal. 
 <div align="center">
   <img 
@@ -80,8 +81,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
     style="width:75%;height:75%"
   />
 </div>
-
-You should see the plug-in has been turned on in the Touch Portal Settings.
+<p align="center">You should see the plug-in has been turned on in the Touch Portal Settings.</p>
 <div align="center">
   <img 
     src="tutorial-assets/touchportal-settings-panel.png"
@@ -97,10 +97,25 @@ You should see the plug-in has been turned on in the Touch Portal Settings.
     alt="sync-token" style="width:75%;height:75%"
   />
 </div>
+ 
+ <div>
+  <strong>Notes:</strong>
+  <ul>
+    <li>Sometimes the module may not pop-up over Touch Portal, you may have to focus on the YouTube Music Desktop App to see it.</li>
+    <li>Windows Specific: You have to click on the YouTube Music App icon in the Taskbar</li>
+  </ul>
+ </div>  
+ 
+10. Once the Companion Authorization Request has been approved, you should see the plugin listed in the **Companion** section of the YouTube Music App.
+<div align="center">
+<img 
+  src="tutorial-assets/plugin-in-companion-list-plugin-installed.png"
+  alt="plugin-installed"
+  style="width:75%"
+/>
+</div>
 
-  **_Notes_**: 
-  - Sometimes the module may not pop-up over Touch Portal, you may have to focus on the YouTube Music Desktop App to see it. 
-  - Windows Specific: You have to click on the YouTube Music App icon in the Taskbar
+11. Awesome! You've successfully installed the plug-in.😎 Now go ahead and start jamming! 🤘 💃 🕺
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -219,5 +234,5 @@ Helpful resources that helped me develop the plugin:
 The project was inspired by original plugin written by [KillerBOSS](https://github.com/DamienStaebler/TP-YTDM-Plugin)
 
 
-If you've made it this far, know that you matter and you're doing great 🙂
+If you've made it this far, know that you matter and you're doing great. 🙂
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
