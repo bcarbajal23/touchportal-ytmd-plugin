@@ -69,7 +69,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
   <img 
     src="tutorial-assets/install-plugin-diagram.png" 
     alt="install-plugin" 
-    style="width:75%;height:75%"
+    style="width:95%;"
   />
 </div>
 
@@ -78,7 +78,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
   <img 
     src="tutorial-assets/touchportal-settings-approve-plugin.png" 
     alt="approve-plugin" 
-    style="width:75%;height:75%"
+    style="width:95%;"
   />
 </div>
 <p align="center">You should see the plug-in has been turned on in the Touch Portal Settings.</p>
@@ -86,7 +86,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
   <img 
     src="tutorial-assets/touchportal-settings-panel.png"
     alt="touchportal-settings"
-    style="width:75%"
+    style="width:95%"
   />
 </div>
 
