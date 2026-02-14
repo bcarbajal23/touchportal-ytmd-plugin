@@ -1,6 +1,6 @@
 {
   "sdk": 10,
-  "version": 10100,
+  "version": 10101,
   "name": "Youtube Music Desktop Plugin V2",
   "id": "ytmd_plugin_v2",
   "configuration": {
