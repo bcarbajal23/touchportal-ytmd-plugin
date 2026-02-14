@@ -2,8 +2,9 @@
 # TouchPortal Youtube Music Desktop Plugin
 
 ## Description
-This is a [Touch Portal](https://www.touch-portal.com/) plugin for the [YouTube Music Desktop Application](https://ytmdesktop.app/). 
-I developed this app in NodeJS using version 20.20. The app is packaged as a NodeJS executable so that you **do not** need to install Node for this plug-in to run.
+This is a [Touch Portal](https://www.touch-portal.com/) plugin for the [YouTube Music Desktop Application](https://ytmdesktop.app/). The plugin let's you control the player from your mobile device. 
+
+I developed this app in NodeJS v20.20. The app is packaged as a NodeJS executable so that you **do not** need to install Node for this plug-in to run.
 
 <div align="center" style="padding:8px">
   <a href="https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=bug-report.md">Bug Report</a>
@@ -22,6 +23,7 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#page-template">Page Template</a></li>
         <li><a href="#trouble-shooting">Trouble Shooting</a></li>
       </ul>
     </li>
@@ -121,6 +123,9 @@ I developed this app in NodeJS using version 20.20. The app is packaged as a Nod
 </div>
 
 11. Awesome! You've successfully installed the plug-in.😎 Now go ahead and start jamming! 🤘 💃 🕺
+
+#### Page Template
+If you'd like, here is page template you can import into Touch Portal that I used to testing the plugin (*screenshots above*). [Dropbox Page Download](https://www.dropbox.com/scl/fo/5bqlwh1iy7p1ibj082vhq/AEJ9oaQKY7QeLfHr-SfOYnk?rlkey=ua1mbseoqa6u1pw1olz383m5r&st=ler6q9dc&dl=0)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
