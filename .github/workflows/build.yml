@@ -4,7 +4,10 @@ on:
   push:
     tags:
       - 'v*'
-          
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+            
 permissions:
   contents: write
   
@@ -31,6 +34,7 @@ jobs:
         run: node scripts/build.js
       
       - name: Release Plugin
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: ./*tpp
