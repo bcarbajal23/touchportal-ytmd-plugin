@@ -210,17 +210,18 @@ If you see a blue "Windows protected your PC" window (SmartScreen):
 ## Contributing
 If you have any suggestions, feel free to fork the repo and create a pull request. You can also open a [**GitHub Issue**](https://github.com/bcarbajal23/touchportal-ytmd-plugin/issues/new?template=feature-request.md) for a feature request. Any contribution is **greatly appreciated**
 
-1. Fork Project
+Full Guidelines on how to contribute to the plug-in [CONTRIBUTING.md](docs/CONTRIBUTING.md)
+<!-- 1. Fork Project
 2. Create your Feature Branch: `git checkout -b new-awesome-feature`
 3. Commit your changes: `git commit -m feat: added cool new feature` 
     - Using [semantic-commit-messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
 4. Push to your branch: `git push origin new-awesome-feature`
-5. Open a Pull Request and assign it to me.
+5. Open a Pull Request and assign it to me. -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## License
-Distributed on GNU General Public License. See [`LICENSE`](/LICENSE)for more information
+Distributed on GNU General Public License. See [LICENSE](/LICENSE) for more information
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -241,7 +242,7 @@ Helpful resources that helped me develop the plugin:
 - [Touch Portal Node Api](https://github.com/spdermn02/touchportal-node-api)
 - [ytmdesktop-ts-companion](https://xeroxdev.github.io/ytmdesktop-ts-companion/index.html)  
 
-The project was inspired by original plugin written by [KillerBOSS](https://github.com/DamienStaebler/TP-YTDM-Plugin)
+The project was inspired by original plugin written by [Damien Staebler](https://github.com/DamienStaebler/TP-YTDM-Plugin)
 
 
 If you've made it this far, know that you matter and you're doing great. 🙂
