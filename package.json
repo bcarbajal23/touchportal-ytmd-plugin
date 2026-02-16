@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/bcarbajal23/touchportal-ytmd-plugin-v2.git"
   },
-  "license": "ISC",
+  "license": "GPL-3.0",
   "author": "Carlos Carbajal",
   "type": "commonjs",
   "main": "index.js",

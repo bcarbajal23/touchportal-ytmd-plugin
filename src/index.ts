@@ -1,8 +1,5 @@
-import {
-  touchPortalClient,
-  TP_ACTIONS,
-  TP_STATES,
-} from "./services/touchPortalClient";
+import { touchPortalClient } from "./services/touchPortalClient";
+import { TP_ACTIONS, TP_STATES } from "./services/utils/tpConstants";
 import { YTMDClient } from "./services/ytmdClient";
 
 (async () => {
