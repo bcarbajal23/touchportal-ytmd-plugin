@@ -2,6 +2,15 @@ import { touchPortalClient } from "./services/touchPortalClient";
 import { TP_ACTIONS, TP_STATES } from "./services/utils/tpConstants";
 import { YTMDClient } from "./services/ytmdClient";
 
+
+const playerState = {
+  isCurrentlyMuted: false,
+  currentRepeatMode: 0,
+  currentShuffleMode: "OFF",
+  likeDislikeActionSet:"",
+  lastPlayState: "",
+};
+
 (async () => {
   try {
     const tpClient = await touchPortalClient();
@@ -13,6 +22,7 @@ import { YTMDClient } from "./services/ytmdClient";
     let likeDislikeActionSet = "";
     let lastPlayState = "";
 
+    
     // State listener for Playing and Pausing Player
     ytmdClient.socketClient.addStateListener((state) => {
       const status = state.player?.trackState ? "Play" : "Pause";
