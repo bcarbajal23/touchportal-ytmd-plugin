@@ -1,13 +1,20 @@
 import { touchPortalClient } from "./services/touchPortalClient";
+import { ActionId, ActionRegistry, createActionHandlers } from "./services/utils/actionHandlers";
 import { TP_ACTIONS, TP_STATES } from "./services/utils/tpConstants";
 import { YTMDClient } from "./services/ytmdClient";
 
-
-const playerState = {
-  isCurrentlyMuted: false,
-  currentRepeatMode: 0,
-  currentShuffleMode: "OFF",
-  likeDislikeActionSet:"",
+interface PlayerState {
+  isCurrentlyMuted: boolean | null;
+  currentRepeatMode: number;
+  currentShuffleMode: string;
+  likeDislikeActionSet: string;
+  lastPlayState: string;
+}
+const playerState: PlayerState = {
+  isCurrentlyMuted: null,
+  currentRepeatMode: -1,
+  currentShuffleMode: "",
+  likeDislikeActionSet: "",
   lastPlayState: "",
 };
 
@@ -15,95 +22,80 @@ const playerState = {
   try {
     const tpClient = await touchPortalClient();
     const ytmdClient = new YTMDClient();
-
-    let isCurrentlyMuted = false;
-    let currentRepeatMode = 0;
-    let currentShuffleMode = "OFF";
-    let likeDislikeActionSet = "";
-    let lastPlayState = "";
-
+    const actionHandlers: ActionRegistry = createActionHandlers(ytmdClient, playerState, tpClient);
     
-    // State listener for Playing and Pausing Player
     ytmdClient.socketClient.addStateListener((state) => {
+      if (!state || !state.player || !state.video) return;
+      
       const status = state.player?.trackState ? "Play" : "Pause";
+      /**
+       * Get the song details. 
+       * Currently not using Author, title, or Album but could be used
+       * in the future. 
+       */
       const { author, title, likeStatus, album } = state.video ?? {};
 
-      if (lastPlayState === status) return;
-      lastPlayState = status;
-      console.log("YTMD SocketClient Player Status:::::", status);
-      tpClient.stateUpdate(TP_ACTIONS.ytmdPlayPause, status);
-      tpClient.stateUpdate(TP_STATES.ytmdPlaybackState, status);
-
       /**
-       * So that the song/video Like/Dislike status appears properly
-       * on first start up of the plugin
+       * Handle the Playing and Pausing of the player. Will only trigger and update
+       * if the state of the player has changed. That way it will not flood updates to
+       * Touch Portal whenever a different action on the player is triggered, 
+       * i.e. pressing next track or like or disliking a song.
        */
-      const videoLikedStatusStr =
-        likeStatus === 0
-          ? "DISLIKE"
-          : likeStatus === 1
-            ? "INDIFFERENT"
-            : "LIKE";
-
-      tpClient.stateUpdate(TP_ACTIONS.ytmdLikeDislike, videoLikedStatusStr);
-      tpClient.stateUpdate(TP_STATES.ytmdLikeDislike, videoLikedStatusStr);
-    });
-
-    // State listener for Muted and Unmuted Player
-    ytmdClient.socketClient.addStateListener((state) => {
+      if (playerState.lastPlayState !== status) {
+        playerState.lastPlayState = status;
+        console.log("YTMD SocketClient Player Status:::::", status);
+        tpClient.stateUpdate(TP_ACTIONS.ytmdPlayPause, status);
+        tpClient.stateUpdate(TP_STATES.ytmdPlaybackState, status); 
+      }
+      
       const isMuted = state.player?.muted ?? false;
-
-      if (isCurrentlyMuted === isMuted) return;
-      isCurrentlyMuted = isMuted;
-      const audioStatus = isMuted ? "Muted" : "Unmuted";
-      tpClient.stateUpdate(TP_ACTIONS.ytmdMuteUnmute, audioStatus);
-      tpClient.stateUpdate(TP_STATES.ytmdMutedState, audioStatus);
-    });
-
-    // State lister for Repeat and Non-Repeat Mode
-    ytmdClient.socketClient.addStateListener((state) => {
-      const repeatMode = state.player?.queue?.repeatMode ?? 0;
-      const repeatModeStr =
-        repeatMode === 0 ? "NONE" : repeatMode === 1 ? "ALL" : "ONE";
-      currentRepeatMode = repeatMode + 1;
       /**
-       * Reset to 0 if repeat mode is greater than 2
-       * @see {@link https://github.com/XeroxDev/ytmdesktop-ts-companion/blob/main/src/enums/repeat-mode.ts}
-       *
+       * Handle Muting and Unmuting of the song/video. To avoid flooding updates to
+       * the state in Touch Portal, only update if the state of the player has changed.
        */
-      if (currentRepeatMode > 2) currentRepeatMode = 0;
-
-      tpClient.stateUpdate(TP_ACTIONS.ytmdRepeatMode, repeatModeStr);
-      tpClient.stateUpdate(TP_STATES.ytmdRepeatMode, repeatModeStr);
-    });
-
-    // State lister for Shuffle and Non-Shuffle Mode
-    ytmdClient.socketClient.addStateListener((state) => {
-      const shuffleMode = currentShuffleMode;
-      tpClient.stateUpdate(TP_ACTIONS.ytmdShuffleMode, shuffleMode);
-      tpClient.stateUpdate(TP_STATES.ytmdShuffleMode, shuffleMode);
-    });
-
-    ytmdClient.socketClient.addStateListener((state) => {
-      if (!state.video || !state.video?.likeStatus) return;
-
+      if (playerState.isCurrentlyMuted !== isMuted) {
+        playerState.isCurrentlyMuted = isMuted;
+        const audioStatus = isMuted ? "Muted" : "Unmuted";
+        tpClient.stateUpdate(TP_ACTIONS.ytmdMuteUnmute, audioStatus);
+        tpClient.stateUpdate(TP_STATES.ytmdMutedState, audioStatus);
+      }
+      
+      // Handle the Cycling of Repeat Mode.
+      const repeatMode = state.player?.queue?.repeatMode ?? 0;
+      /**
+       * Only send the update if the repeat mode state changes. This will avoid flooding 
+       * Touch Portal with unnecessary state updates.
+       */
+      if (playerState.currentRepeatMode !== repeatMode) {
+        const repeatModeStr =
+          repeatMode === 0 ? "NONE" : repeatMode === 1 ? "ALL" : "ONE";
+        playerState.currentRepeatMode = repeatMode;
+        
+        tpClient.stateUpdate(TP_ACTIONS.ytmdRepeatMode, repeatModeStr);
+        tpClient.stateUpdate(TP_STATES.ytmdRepeatMode, repeatModeStr);
+      }
+      
+      // Handle Like and Dislike of song/video.
       const videoLikeStatus = state.video?.likeStatus as number;
-      const videoLikedStatusStr =
+      if (videoLikeStatus !== undefined) {
+        const videoLikedStatusStr =
         videoLikeStatus === 0
           ? "DISLIKE"
           : videoLikeStatus === 1
             ? "INDIFFERENT"
             : "LIKE";
 
-      /**
-       * if the song/video is neither LIKE or DISLIKE, then it is INDIFFERENT
-       * and will break out of the stateUpdate listener
-       */
-      let indiffLikeState = "INDIFFERENT";
-      if (indiffLikeState === likeDislikeActionSet) return;
-
-      tpClient.stateUpdate(TP_ACTIONS.ytmdLikeDislike, videoLikedStatusStr);
-      tpClient.stateUpdate(TP_STATES.ytmdLikeDislike, videoLikedStatusStr);
+        /**
+         * Only send the update to the state if the like/dislike status changes for the 
+         * current song/video. This will avoid YTMD from flooding Touch Portal with 
+         * state updates.
+         */
+        if (playerState.likeDislikeActionSet !== videoLikedStatusStr) {   
+          playerState.likeDislikeActionSet = videoLikedStatusStr;
+          tpClient.stateUpdate(TP_ACTIONS.ytmdLikeDislike, videoLikedStatusStr);
+          tpClient.stateUpdate(TP_STATES.ytmdLikeDislike, videoLikedStatusStr);
+        }
+       }
     });
 
     ytmdClient.socketClient.addConnectionStateListener((state) => {
@@ -121,68 +113,23 @@ const playerState = {
 
     tpClient.on("Action", async (data: any) => {
       console.log("TPClient Action:::::", data);
-      const actionId = data.actionId;
+      const actionId: ActionId = data.actionId;
       console.log("TPClient Action ID:::::", actionId);
-      try {
-        switch (actionId) {
-          case "ytmd.action.play/pause":
-            await ytmdClient.restClient.playPause();
-            break;
-          case "ytmd.action.nextTrack":
-            await ytmdClient.restClient.next();
-            break;
-          case "ytmd.action.prevTrack":
-            await ytmdClient.restClient.previous();
-            break;
-          case "ytmd.action.mute/unmute":
-            if (isCurrentlyMuted) {
-              await ytmdClient.restClient.unmute();
-            } else {
-              await ytmdClient.restClient.mute();
-            }
-            break;
-          case "ytmd.action.volumeUp":
-            await ytmdClient.restClient.volumeUp();
-            break;
-          case "ytmd.action.volumeDown":
-            await ytmdClient.restClient.volumeDown();
-            break;
-          case "ytmd.action.repeatMode":
-            await ytmdClient.restClient.repeatMode(currentRepeatMode);
-            break;
-          case "ytmd.action.shuffleMode":
-            if (currentShuffleMode === "OFF") {
-              currentShuffleMode = "ON";
-            } else {
-              currentShuffleMode = "OFF";
-            }
-            await ytmdClient.restClient.shuffle();
-            break;
-          case "ytmd.action.like/dislike":
-            const actionLikeDislikeState = data.data.find(
-              (item: any) => item.id === "ytmd.choice.likeDislike",
-            )?.value;
-
-            if (!actionLikeDislikeState) break;
-
-            if (actionLikeDislikeState === "LIKE") {
-              likeDislikeActionSet =
-                actionLikeDislikeState === "LIKE" ? "LIKE" : "INDIFFERENT";
-              await ytmdClient.restClient.toggleLike();
-            } else if (actionLikeDislikeState === "DISLIKE") {
-              likeDislikeActionSet =
-                actionLikeDislikeState === "DISLIKE"
-                  ? "DISLIKE"
-                  : "INDIFFERENT";
-              await ytmdClient.restClient.toggleDislike();
-            }
-            break;
-          default:
-            console.log(`No handler for action ID:  ${actionId}`);
-        }
-      } catch (error) {
-        console.error(`Error handling action ${actionId}:`, error);
+      
+      const actionHandler = actionHandlers[ actionId ];
+      if (!actionHandler) {
+        console.warn(`[TouchPortal]: Action ${ actionId } not found in ActionRegistry`);
+        return;
       }
+      
+      try {
+        await actionHandler(data);
+      } catch (error) {
+        console.error(
+          `Error handling action ${ actionId }; it may not be in ActionRegistry:`, error
+        );
+      }
+      
     });
   } catch (error) {
     console.error("Error Starting up TouchPortal and/or YTMD clients:", error);
