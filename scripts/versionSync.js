@@ -7,7 +7,7 @@ const packageJSON = require(packageJsonPath);
 const packageVersion = packageJSON.version.split('.').map(Number);
 
 // generate version for entry.tp using package.json version to match into whole numbers
-// i.e. 1.0.1 (package.json verion) -> 101 (entry.tp version)
+// i.e. 1.0.1 (package.json verion) -> 10001 (entry.tp version)
 const tpEntryVersion =
   (packageVersion[ 0 ] * 10000) + (packageVersion[ 1 ] * 100) + packageVersion[ 2 ];
 
