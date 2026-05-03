@@ -1,6 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import { CompanionConnector, RestClient, Settings, SocketClient } from 'ytmdesktop-ts-companion';
+import fs from "fs";
+import path from "path";
+import {
+  CompanionConnector,
+  RestClient,
+  Settings,
+  SocketClient,
+} from "ytmdesktop-ts-companion";
 
 const DEFAULT_DELAY = 2000;
 const MAX_ATTEMPTS = 15;
@@ -9,13 +14,13 @@ export class YTMDClient {
   public restClient: RestClient;
   public socketClient: SocketClient;
   private tokenPath: string;
-  
+
   constructor(host: string = "127.0.0.1", port: number = 9863) {
     const exeDir = path.dirname(process.execPath);
-    const pluginRootDir = path.join(exeDir, '.');
-    
+    const pluginRootDir = path.join(exeDir, ".");
+
     this.tokenPath = path.join(pluginRootDir, ".token");
-    
+
     const version = this.getVersion();
     const settings: Settings = {
       host: host,
@@ -35,7 +40,7 @@ export class YTMDClient {
    */
   public async connect(): Promise<void> {
     const token = this.getToken() || "";
-
+    console.log("ytmdClient ::: token:", token);
     if (token) {
       this.companionConnector.setAuthToken(token);
     } else {
@@ -76,7 +81,7 @@ export class YTMDClient {
           const tokenResponse = await this.restClient.getAuthToken(
             response.code,
           );
-          
+
           token = tokenResponse.token;
           this.companionConnector.setAuthToken(token);
           this.saveToken(token);
@@ -89,7 +94,7 @@ export class YTMDClient {
       throw new Error(
         "Authentication Timeout. User did not click 'Allow' in time.",
       );
-      
+
       // fs.writeFileSync(this.tokenPath, token, "utf-8");
     } catch (error) {
       console.error("Error during auth token synchronization:", error);
@@ -100,14 +105,13 @@ export class YTMDClient {
   private saveToken(token: string): void {
     try {
       if (token) {
-      fs.writeFileSync(token, token, "utf-8");
-    }
+        fs.writeFileSync(token, token, "utf-8");
+      }
     } catch (error) {
       console.log("");
     }
-    
   }
-  
+
   private getToken(): string | null {
     try {
       const token = fs.readFileSync(this.tokenPath, "utf-8").trim();
