@@ -16,3 +16,4 @@ bundlePlugin.sh
 *.old
 *OLD
 *temp*
+*.token*

@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { PLUGIN_VERSION } from "../version";
 import {
   CompanionConnector,
   RestClient,
@@ -16,10 +17,8 @@ export class YTMDClient {
   private tokenPath: string;
 
   constructor(host: string = "127.0.0.1", port: number = 9863) {
-    const exeDir = path.dirname(process.execPath);
-    const pluginRootDir = path.join(exeDir, ".");
 
-    this.tokenPath = path.join(pluginRootDir, ".token");
+    this.tokenPath = path.join(__dirname, ".token");
 
     const version = this.getVersion();
     const settings: Settings = {
@@ -39,9 +38,8 @@ export class YTMDClient {
    * Initialize connection with ytmd app and handle autherization flow.
    */
   public async connect(): Promise<void> {
-    const token = this.getToken() || "";
-    console.log("ytmdClient ::: token:", token);
-    if (token) {
+    const token = await this.getToken() ?? "";
+    if (token && token !== "") {
       this.companionConnector.setAuthToken(token);
     } else {
       await this.syncNewAuthToken();
@@ -50,13 +48,7 @@ export class YTMDClient {
   }
 
   private getVersion(): string {
-    try {
-      const packageJsonPath = path.join(__dirname, "..", "package.json");
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-      return packageJson.version || "1.0.0";
-    } catch {
-      return "1.0.0";
-    }
+    return PLUGIN_VERSION ?? "1.0.0";
   }
 
   private delay(ms: number): Promise<void> {
@@ -94,30 +86,28 @@ export class YTMDClient {
       throw new Error(
         "Authentication Timeout. User did not click 'Allow' in time.",
       );
-
-      // fs.writeFileSync(this.tokenPath, token, "utf-8");
     } catch (error) {
       console.error("Error during auth token synchronization:", error);
       throw error;
     }
   }
 
-  private saveToken(token: string): void {
+  private async saveToken(token: string): Promise<void> {
     try {
       if (token) {
-        fs.writeFileSync(token, token, "utf-8");
+        await fs.promises.writeFile(this.tokenPath, token, "utf-8");
       }
     } catch (error) {
-      console.log("");
+      console.log("SaveToken::: Could not write token", error);
     }
   }
 
-  private getToken(): string | null {
+  private async getToken(): Promise<string> {
     try {
-      const token = fs.readFileSync(this.tokenPath, "utf-8").trim();
-      return token || null;
+      const token = await fs.promises.readFile(this.tokenPath, "utf-8");
+      return token.trim();
     } catch {
-      return null;
+      return "";
     }
   }
 }
