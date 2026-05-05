@@ -21,10 +21,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./dist",
-    "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "build": "npm run clean && npx tsc",
+    "start": "node ./dist/index.js",
     "watch": "npx tsc --watch",
-    "version": "node scripts/versionSync.js && git add config/entry.tp"
+    "version": "node scripts/versionSync.js && git add config/entry.tp src/version.ts"
   },
   "pkg": {
     "assets": [
