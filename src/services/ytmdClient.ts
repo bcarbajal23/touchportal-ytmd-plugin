@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
 import { PLUGIN_VERSION } from "../version";
 import {
   CompanionConnector,
@@ -17,9 +18,15 @@ export class YTMDClient {
   private tokenPath: string;
 
   constructor(host: string = "127.0.0.1", port: number = 9863) {
-
-    this.tokenPath = path.join(__dirname, ".token");
-
+    const dirData = process.env.APPDATA
+      ? path.join(process.env.APPDATA, "touchportal-ytmd-plugin")
+      : path.join(os.homedir(), ".touchportal-ytmd");
+    
+    if (!fs.existsSync(dirData)) {
+      fs.mkdirSync(dirData, {recursive: true})
+    }
+    this.tokenPath = path.join(dirData, ".token");
+    
     const version = this.getVersion();
     const settings: Settings = {
       host: host,
