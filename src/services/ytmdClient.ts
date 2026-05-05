@@ -20,13 +20,13 @@ export class YTMDClient {
   constructor(host: string = "127.0.0.1", port: number = 9863) {
     const dirData = process.env.APPDATA
       ? path.join(process.env.APPDATA, "touchportal-ytmd-plugin")
-      : path.join(os.homedir(), ".touchportal-ytmd");
-    
+      : path.join(os.homedir(), ".touchportal-ytmd-plugin");
+
     if (!fs.existsSync(dirData)) {
-      fs.mkdirSync(dirData, {recursive: true})
+      fs.mkdirSync(dirData, { recursive: true })
     }
     this.tokenPath = path.join(dirData, ".token");
-    
+
     const version = this.getVersion();
     const settings: Settings = {
       host: host,
@@ -54,6 +54,25 @@ export class YTMDClient {
     this.socketClient.connect();
   }
 
+  /**
+   * reauthConnection()
+   * - will delete the old stale auth token saved and will
+   *   reauthenicate a new connection to YTMD.
+   */
+  public async reauthConnection(): Promise<void> {
+    try {
+      console.log("Re-authenticatin YTMD connection...");
+
+      await this.clearStaleToken();
+
+      await this.syncNewAuthToken();
+      this.socketClient.connect();
+    } catch (error) {
+      console.log("There was an error re-authenticating", error);
+      throw error;
+    }
+  }
+
   private getVersion(): string {
     return PLUGIN_VERSION ?? "1.0.0";
   }
@@ -61,6 +80,18 @@ export class YTMDClient {
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
+  private async clearStaleToken(): Promise<void> {
+    try {
+      if (fs.existsSync(this.tokenPath)) {
+        await fs.promises.unlink(this.tokenPath);
+      }
+    } catch (error) {
+      console.log("Could not delete the stale ytmd auth token", error);
+    }
+
+  }
+
   private async syncNewAuthToken(): Promise<void> {
     try {
       // request new auth token
