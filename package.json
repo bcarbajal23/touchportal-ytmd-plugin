@@ -22,8 +22,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./dist",
     "build": "npm run clean && npx tsc",
+    "start": "node ./dist/index.js",
     "watch": "npx tsc --watch",
-    "version": "node scripts/versionSync.js && git add config/entry.tp"
+    "version": "node scripts/versionSync.js && git add config/entry.tp src/version.ts"
   },
   "pkg": {
     "assets": [

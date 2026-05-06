@@ -1,6 +1,13 @@
-import fs from 'fs';
-import path from 'path';
-import { CompanionConnector, RestClient, Settings, SocketClient } from 'ytmdesktop-ts-companion';
+import fs from "fs";
+import path from "path";
+import os from "os";
+import { PLUGIN_VERSION } from "../version";
+import {
+  CompanionConnector,
+  RestClient,
+  Settings,
+  SocketClient,
+} from "ytmdesktop-ts-companion";
 
 const DEFAULT_DELAY = 2000;
 const MAX_ATTEMPTS = 15;
@@ -9,13 +16,17 @@ export class YTMDClient {
   public restClient: RestClient;
   public socketClient: SocketClient;
   private tokenPath: string;
-  
+
   constructor(host: string = "127.0.0.1", port: number = 9863) {
-    const exeDir = path.dirname(process.execPath);
-    const pluginRootDir = path.join(exeDir, '.');
-    
-    this.tokenPath = path.join(pluginRootDir, ".token");
-    
+    const dirData = process.env.APPDATA
+      ? path.join(process.env.APPDATA, "touchportal-ytmd-plugin")
+      : path.join(os.homedir(), ".touchportal-ytmd-plugin");
+
+    if (!fs.existsSync(dirData)) {
+      fs.mkdirSync(dirData, { recursive: true })
+    }
+    this.tokenPath = path.join(dirData, ".token");
+
     const version = this.getVersion();
     const settings: Settings = {
       host: host,
@@ -34,9 +45,8 @@ export class YTMDClient {
    * Initialize connection with ytmd app and handle autherization flow.
    */
   public async connect(): Promise<void> {
-    const token = this.getToken() || "";
-
-    if (token) {
+    const token = await this.getToken() ?? "";
+    if (token && token !== "") {
       this.companionConnector.setAuthToken(token);
     } else {
       await this.syncNewAuthToken();
@@ -44,19 +54,44 @@ export class YTMDClient {
     this.socketClient.connect();
   }
 
-  private getVersion(): string {
+  /**
+   * reauthConnection()
+   * - will delete the old stale auth token saved and will
+   *   reauthenicate a new connection to YTMD.
+   */
+  public async reauthConnection(): Promise<void> {
     try {
-      const packageJsonPath = path.join(__dirname, "..", "package.json");
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-      return packageJson.version || "1.0.0";
-    } catch {
-      return "1.0.0";
+      console.log("Re-authenticatin YTMD connection...");
+
+      await this.clearStaleToken();
+
+      await this.syncNewAuthToken();
+      this.socketClient.connect();
+    } catch (error) {
+      console.log("There was an error re-authenticating", error);
+      throw error;
     }
+  }
+
+  private getVersion(): string {
+    return PLUGIN_VERSION ?? "1.0.0";
   }
 
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
+  private async clearStaleToken(): Promise<void> {
+    try {
+      if (fs.existsSync(this.tokenPath)) {
+        await fs.promises.unlink(this.tokenPath);
+      }
+    } catch (error) {
+      console.log("Could not delete the stale ytmd auth token", error);
+    }
+
+  }
+
   private async syncNewAuthToken(): Promise<void> {
     try {
       // request new auth token
@@ -76,7 +111,7 @@ export class YTMDClient {
           const tokenResponse = await this.restClient.getAuthToken(
             response.code,
           );
-          
+
           token = tokenResponse.token;
           this.companionConnector.setAuthToken(token);
           this.saveToken(token);
@@ -89,31 +124,28 @@ export class YTMDClient {
       throw new Error(
         "Authentication Timeout. User did not click 'Allow' in time.",
       );
-      
-      // fs.writeFileSync(this.tokenPath, token, "utf-8");
     } catch (error) {
       console.error("Error during auth token synchronization:", error);
       throw error;
     }
   }
 
-  private saveToken(token: string): void {
+  private async saveToken(token: string): Promise<void> {
     try {
       if (token) {
-      fs.writeFileSync(token, token, "utf-8");
-    }
+        await fs.promises.writeFile(this.tokenPath, token, "utf-8");
+      }
     } catch (error) {
-      console.log("");
+      console.log("SaveToken::: Could not write token", error);
     }
-    
   }
-  
-  private getToken(): string | null {
+
+  private async getToken(): Promise<string> {
     try {
-      const token = fs.readFileSync(this.tokenPath, "utf-8").trim();
-      return token || null;
+      const token = await fs.promises.readFile(this.tokenPath, "utf-8");
+      return token.trim();
     } catch {
-      return null;
+      return "";
     }
   }
 }
