@@ -1,15 +1,13 @@
 import { touchPortalClient } from "./services/touchPortalClient";
-import { ActionId, ActionRegistry, createActionHandlers } from "./services/utils/actionHandlers";
+import {
+  ActionRegistry,
+  createActionHandlers,
+} from "./services/utils/actionHandlers";
 import { TP_ACTIONS, TP_STATES } from "./services/utils/tpConstants";
 import { YTMDClient } from "./services/ytmdClient";
 import { SocketState } from "ytmdesktop-ts-companion";
-interface PlayerState {
-  isCurrentlyMuted: boolean | null;
-  currentRepeatMode: number;
-  currentShuffleMode: string;
-  likeDislikeActionSet: string;
-  lastPlayState: string;
-}
+import { PlayerState } from "./types/ytmd";
+import { ActionData, ActionId } from "./types/touchPortal";
 const playerState: PlayerState = {
   isCurrentlyMuted: null,
   currentRepeatMode: -1,
@@ -22,23 +20,27 @@ const playerState: PlayerState = {
   try {
     const tpClient = await touchPortalClient();
     const ytmdClient = new YTMDClient();
-    const actionHandlers: ActionRegistry = createActionHandlers(ytmdClient, playerState, tpClient);
+    const actionHandlers: ActionRegistry = createActionHandlers(
+      ytmdClient,
+      playerState,
+      tpClient,
+    );
 
     ytmdClient.socketClient.addStateListener((state) => {
       if (!state || !state.player || !state.video) return;
 
       const status = state.player?.trackState ? "Play" : "Pause";
       /**
-       * Get the song details. 
+       * Get the song details.
        * Currently not using Author, title, or Album but could be used
-       * in the future. 
+       * in the future.
        */
-      const { author, title, likeStatus, album } = state.video ?? {};
+      //const { author, title, likeStatus, album } = state.video ?? {};
 
       /**
        * Handle the Playing and Pausing of the player. Will only trigger and update
        * if the state of the player has changed. That way it will not flood updates to
-       * Touch Portal whenever a different action on the player is triggered, 
+       * Touch Portal whenever a different action on the player is triggered,
        * i.e. pressing next track or like or disliking a song.
        */
       if (playerState.lastPlayState !== status) {
@@ -63,7 +65,7 @@ const playerState: PlayerState = {
       // Handle the Cycling of Repeat Mode.
       const repeatMode = state.player?.queue?.repeatMode ?? 0;
       /**
-       * Only send the update if the repeat mode state changes. This will avoid flooding 
+       * Only send the update if the repeat mode state changes. This will avoid flooding
        * Touch Portal with unnecessary state updates.
        */
       if (playerState.currentRepeatMode !== repeatMode) {
@@ -86,8 +88,8 @@ const playerState: PlayerState = {
               : "LIKE";
 
         /**
-         * Only send the update to the state if the like/dislike status changes for the 
-         * current song/video. This will avoid YTMD from flooding Touch Portal with 
+         * Only send the update to the state if the like/dislike status changes for the
+         * current song/video. This will avoid YTMD from flooding Touch Portal with
          * state updates.
          */
         if (playerState.likeDislikeActionSet !== videoLikedStatusStr) {
@@ -120,14 +122,18 @@ const playerState: PlayerState = {
       process.exit(0);
     });
 
-    tpClient.on("Action", async (data: any) => {
+    //
+    tpClient.on("Action", async (data: ActionData) => {
       console.log("TPClient Action:::::", data);
+      console.log("data type of", typeof data);
       const actionId: ActionId = data.actionId;
       console.log("TPClient Action ID:::::", actionId);
 
       const actionHandler = actionHandlers[actionId];
       if (!actionHandler) {
-        console.warn(`[TouchPortal]: Action ${actionId} not found in ActionRegistry`);
+        console.warn(
+          `[TouchPortal]: Action ${actionId} not found in ActionRegistry`,
+        );
         return;
       }
 
@@ -135,10 +141,10 @@ const playerState: PlayerState = {
         await actionHandler(data);
       } catch (error) {
         console.error(
-          `Error handling action ${actionId}; it may not be in ActionRegistry:`, error
+          `Error handling action ${actionId}; it may not be in ActionRegistry:`,
+          error,
         );
       }
-
     });
   } catch (error) {
     console.error("Error Starting up TouchPortal and/or YTMD clients:", error);

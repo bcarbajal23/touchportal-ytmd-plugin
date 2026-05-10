@@ -1,4 +1,4 @@
-export const PLUGIN_ID = 'ytmd_plugin_v2';
+export const PLUGIN_ID = "ytmd_plugin_v2";
 
 export const TP_ACTIONS = {
   ytmdPlayPause: "ytmd.action.play/pause",
