@@ -2,10 +2,10 @@ const fs = require("fs");
 const path = require("path");
 
 // Read package.json and extract version to be bumped
-const packageJsonPath = path.resolve(__dirname, '../package.json');
+const packageJsonPath = path.resolve(__dirname, "../package.json");
 const packageJSON = require(packageJsonPath);
 const packageVersionStr = packageJSON.version;
-const packageVersion = packageVersionStr.split('.').map(Number);
+const packageVersion = packageVersionStr.split(".").map(Number);
 
 // generate version for entry.tp using package.json version to match into whole numbers
 // i.e. 1.0.1 (package.json verion) -> 10001 (entry.tp version)
@@ -17,8 +17,8 @@ console.log(
 );
 
 // sync version to entry.tp
-const entryPath = path.resolve(__dirname, '../config/entry.tp');
-const entryFile = fs.readFileSync(entryPath, 'utf-8');
+const entryPath = path.resolve(__dirname, "../config/entry.tp");
+const entryFile = fs.readFileSync(entryPath, "utf-8");
 const entryFileJSON = JSON.parse(entryFile);
 
 entryFileJSON.version = tpEntryVersion;
@@ -27,6 +27,6 @@ fs.writeFileSync(entryPath, JSON.stringify(entryFileJSON, null, 2));
 console.log(
   `Sycning package.json version ${packageVersionStr} with version.ts version ${packageVersionStr}`
 );
-const versionTsPath = path.resolve(__dirname, '../src/version.ts');
+const versionTsPath = path.resolve(__dirname, "../src/version.ts");
 const versionTsContent = `export const PLUGIN_VERSION = "${packageVersionStr}";`;
 fs.writeFileSync(versionTsPath, versionTsContent);
