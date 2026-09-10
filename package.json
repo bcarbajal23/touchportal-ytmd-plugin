@@ -40,7 +40,7 @@
     "@types/node": "^20.19.31",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
-    "archiver": "^7.0.1",
+    "archiver": "^8.0.0",
     "eslint": "^10.3.0",
     "fs-extra": "^11.3.3",
     "globals": "^17.6.0",
