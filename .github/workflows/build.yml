@@ -3,40 +3,40 @@ name: Build Plugin
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
     branches: ["main"]
   pull_request:
     branches: ["main"]
-            
+
 permissions:
   contents: write
-  
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-      
+
       - name: Setup Node 20
         uses: actions/setup-node@v6
         with:
           node-version: 20
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Compile Typescript
         run: npm run build
-      
+
       - name: Package TPP File
-        run: node scripts/build.js
-      
+        run: node scripts/build.mjs
+
       - name: Release Plugin
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: ./*tpp
           generate_release_notes: true
-      
+
